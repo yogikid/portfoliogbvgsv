@@ -30,7 +30,8 @@
     ".next/types/**/*.ts",
     "src",
     "public",
-    "src/types"
+    "src/types",
+    "types/global.d.ts"
   ],
   "exclude": ["node_modules"]
 }
