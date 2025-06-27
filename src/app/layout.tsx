@@ -7,19 +7,14 @@ import { motion, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 // import GooeyNav from '@/blocks/Components/GooeyNav/GooeyNav';
 import Dock from '@/blocks/Components/Dock/Dock';
-import { usePathname } from 'next/navigation';
+// import { usePathname } from 'next/navigation';
 // Import the Link component from next/link
 import Link from 'next/link';
 
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import { gilroy } from '@/fonts/fonts';
-import {
-  VscHome,
-  VscArchive,
-  VscAccount,
-  VscSettingsGear,
-} from 'react-icons/vsc';
+import { VscHome, VscArchive, VscAccount } from 'react-icons/vsc';
 
 // Define items for GooeyNav (moved from page.tsx)
 // const items = [
@@ -94,10 +89,10 @@ export default function RootLayout({
   // State for mobile menu (moved from page.tsx)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   // Get current pathname
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
-  // Calculate active index based on pathname
-  const activeIndex = items.findIndex((item) => item.href === pathname);
+  // // Calculate active index based on pathname
+  // const activeIndex = items.findIndex((item) => item.href === pathname);
 
   // --- Lenis Smooth Scrolling Implementation ---
   // Use useRef to hold the Lenis instance

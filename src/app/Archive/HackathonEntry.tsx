@@ -14,15 +14,15 @@ interface HackathonEntryProps {
   techStackIcons?: string[]; // Optional array of paths to tech stack icons
 }
 
-// Mapping of trophy types to image paths
-const trophyImagePaths: Record<string, string> = {
-  first: '/trophies/gold_trophy.png', // <-- Replace with actual paths relative to your public directory
-  second: '/trophies/silver_trophy.png', // <-- Replace with actual paths
-  third: '/trophies/bronze_trophy.png', // <-- Replace with actual paths
-  special: '/trophies/special_trophy.png', // <-- Replace with actual paths
-  participant: '/trophies/participant_trophy.png', // <-- Replace with actual paths
-  // Add more mappings here if you have different trophy types
-};
+// // Mapping of trophy types to image paths
+// const trophyImagePaths: Record<string, string> = {
+//   first: '/trophies/gold_trophy.png', // <-- Replace with actual paths relative to your public directory
+//   second: '/trophies/silver_trophy.png', // <-- Replace with actual paths
+//   third: '/trophies/bronze_trophy.png', // <-- Replace with actual paths
+//   special: '/trophies/special_trophy.png', // <-- Replace with actual paths
+//   participant: '/trophies/participant_trophy.png', // <-- Replace with actual paths
+//   // Add more mappings here if you have different trophy types
+// };
 
 const HackathonEntry: React.FC<HackathonEntryProps> = ({
   entryNumber,
@@ -31,11 +31,11 @@ const HackathonEntry: React.FC<HackathonEntryProps> = ({
   description,
   imageSrc,
   projectLink, // Destructure projectLink
-  trophyType,
+  // trophyType,
   techStackIcons, // Destructure techStackIcons
 }) => {
   // Get the correct image path based on trophyType from the mapping
-  const trophyImagePath = trophyImagePaths[trophyType];
+  // const trophyImagePath = trophyImagePaths[trophyType];
 
   return (
     // Main container: flex-col on mobile, flex-row on medium screens and up
