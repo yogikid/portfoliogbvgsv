@@ -1,6 +1,7 @@
 'use client'; // This layout uses client-side hooks and event listeners
 
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 
 // Include imports for Lenis AND the cursor
 import React, { useEffect, useRef, useState } from 'react';
@@ -334,6 +335,7 @@ export default function RootLayout({
         </div>
         {/* End Sticky Social Media Container */}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
