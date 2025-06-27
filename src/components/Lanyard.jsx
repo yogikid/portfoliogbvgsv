@@ -1,7 +1,7 @@
 /* eslint-disable react/no-unknown-property */
 'use client';
 import { useEffect, useRef, useState } from 'react';
-import { Canvas, extend, useFrame } from '@react-three/fiber';
+import { Canvas, extend, useThree, useFrame } from '@react-three/fiber';
 import {
   useGLTF,
   useTexture,
@@ -15,41 +15,33 @@ import {
   RigidBody,
   useRopeJoint,
   useSphericalJoint,
-  RigidBodyProps,
 } from '@react-three/rapier';
 import { MeshLineGeometry, MeshLineMaterial } from 'meshline';
-import * as THREE from 'three';
 
-// replace with your own imports, see the usage snippet for details
 const cardGLB = 'assets/lanyard/card.glb';
 const lanyard = 'assets/lanyard/lanyard.png';
 
-extend({ MeshLineGeometry, MeshLineMaterial });
+import * as THREE from 'three';
 
-interface LanyardProps {
-  position?: [number, number, number];
-  gravity?: [number, number, number];
-  fov?: number;
-  transparent?: boolean;
-}
+extend({ MeshLineGeometry, MeshLineMaterial });
 
 export default function Lanyard({
   position = [0, 0, 30],
   gravity = [0, -40, 0],
   fov = 20,
   transparent = true,
-}: LanyardProps) {
+}) {
   return (
     <div className="relative z-0 w-full h-screen flex justify-center items-center transform scale-100 origin-center">
       <Canvas
-        camera={{ position, fov }}
+        camera={{ position: position, fov: fov }}
         gl={{ alpha: transparent }}
         onCreated={({ gl }) =>
           gl.setClearColor(new THREE.Color(0x000000), transparent ? 0 : 1)
         }
       >
         <ambientLight intensity={Math.PI} />
-        <Physics gravity={gravity} timeStep={1 / 60}>
+        <Physics interpolate gravity={gravity} timeStep={1 / 120}>
           <Band />
         </Physics>
         <Environment blur={0.75}>
@@ -87,35 +79,27 @@ export default function Lanyard({
   );
 }
 
-interface BandProps {
-  maxSpeed?: number;
-  minSpeed?: number;
-}
-
-function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
-  // Using "any" for refs since the exact types depend on Rapier's internals
-  const band = useRef<any>(null);
-  const fixed = useRef<any>(null);
-  const j1 = useRef<any>(null);
-  const j2 = useRef<any>(null);
-  const j3 = useRef<any>(null);
-  const card = useRef<any>(null);
-
-  const vec = new THREE.Vector3();
-  const ang = new THREE.Vector3();
-  const rot = new THREE.Vector3();
-  const dir = new THREE.Vector3();
-
-  const segmentProps: any = {
-    type: 'dynamic' as RigidBodyProps['type'],
+function Band({ maxSpeed = 50, minSpeed = 0 }) {
+  const band = useRef(),
+    fixed = useRef(),
+    j1 = useRef(),
+    j2 = useRef(),
+    j3 = useRef(),
+    card = useRef();
+  const vec = new THREE.Vector3(),
+    ang = new THREE.Vector3(),
+    rot = new THREE.Vector3(),
+    dir = new THREE.Vector3();
+  const segmentProps = {
+    type: 'dynamic',
     canSleep: true,
     colliders: false,
     angularDamping: 4,
     linearDamping: 4,
   };
-
-  const { nodes, materials } = useGLTF(cardGLB) as any;
+  const { nodes, materials } = useGLTF(cardGLB);
   const texture = useTexture(lanyard);
+  const { width, height } = useThree((state) => state.size);
   const [curve] = useState(
     () =>
       new THREE.CatmullRomCurve3([
@@ -125,24 +109,8 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
         new THREE.Vector3(),
       ])
   );
-  const [dragged, drag] = useState<false | THREE.Vector3>(false);
+  const [dragged, drag] = useState(false);
   const [hovered, hover] = useState(false);
-
-  const [isSmall, setIsSmall] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      return window.innerWidth < 1024;
-    }
-    return false;
-  });
-
-  useEffect(() => {
-    const handleResize = (): void => {
-      setIsSmall(window.innerWidth < 1024);
-    };
-
-    window.addEventListener('resize', handleResize);
-    return (): void => window.removeEventListener('resize', handleResize);
-  }, []);
 
   useRopeJoint(fixed, j1, [[0, 0, 0], [0, 0, 0], 1]);
   useRopeJoint(j1, j2, [[0, 0, 0], [0, 0, 0], 1]);
@@ -155,18 +123,21 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
   useEffect(() => {
     if (hovered) {
       document.body.style.cursor = dragged ? 'grabbing' : 'grab';
-      return () => {
-        document.body.style.cursor = 'auto';
-      };
+      return () => void (document.body.style.cursor = 'auto');
     }
   }, [hovered, dragged]);
 
   useFrame((state, delta) => {
-    if (dragged && typeof dragged !== 'boolean') {
+    if (dragged) {
       vec.set(state.pointer.x, state.pointer.y, 0.5).unproject(state.camera);
       dir.copy(vec).sub(state.camera.position).normalize();
-      vec.add(dir.multiplyScalar(state.camera.position.length()));
+      const distance = state.camera.position.length();
+      vec.add(dir.multiplyScalar(distance));
+
+      // Wake up all physics bodies
       [card, j1, j2, j3, fixed].forEach((ref) => ref.current?.wakeUp());
+
+      // Apply smoother translation
       card.current?.setNextKinematicTranslation({
         x: vec.x - dragged.x,
         y: vec.y - dragged.y,
@@ -185,7 +156,10 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
         );
         ref.current.lerped.lerp(
           ref.current.translation(),
-          delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
+          Math.min(
+            1,
+            delta * (minSpeed + clampedDistance * (maxSpeed - minSpeed))
+          )
         );
       });
       curve.points[0].copy(j3.current.translation());
@@ -205,44 +179,21 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
   return (
     <>
       <group position={[0, 4, 0]}>
-        <RigidBody
-          ref={fixed}
-          {...segmentProps}
-          type={'fixed' as RigidBodyProps['type']}
-        />
-        <RigidBody
-          position={[0.5, 0, 0]}
-          ref={j1}
-          {...segmentProps}
-          type={'dynamic' as RigidBodyProps['type']}
-        >
+        <RigidBody ref={fixed} {...segmentProps} type="fixed" />
+        <RigidBody position={[0.5, 0, 0]} ref={j1} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody
-          position={[1, 0, 0]}
-          ref={j2}
-          {...segmentProps}
-          type={'dynamic' as RigidBodyProps['type']}
-        >
+        <RigidBody position={[1, 0, 0]} ref={j2} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
-        <RigidBody
-          position={[1.5, 0, 0]}
-          ref={j3}
-          {...segmentProps}
-          type={'dynamic' as RigidBodyProps['type']}
-        >
+        <RigidBody position={[1.5, 0, 0]} ref={j3} {...segmentProps}>
           <BallCollider args={[0.1]} />
         </RigidBody>
         <RigidBody
           position={[2, 0, 0]}
           ref={card}
           {...segmentProps}
-          type={
-            dragged
-              ? ('kinematicPosition' as RigidBodyProps['type'])
-              : ('dynamic' as RigidBodyProps['type'])
-          }
+          type={dragged ? 'kinematicPosition' : 'dynamic'}
         >
           <CuboidCollider args={[0.8, 1.125, 0.01]} />
           <group
@@ -250,18 +201,17 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
             position={[0, -1.2, -0.05]}
             onPointerOver={() => hover(true)}
             onPointerOut={() => hover(false)}
-            onPointerUp={(e: any) => {
-              e.target.releasePointerCapture(e.pointerId);
-              drag(false);
-            }}
-            onPointerDown={(e: any) => {
-              e.target.setPointerCapture(e.pointerId);
+            onPointerUp={(e) => (
+              e.target.releasePointerCapture(e.pointerId), drag(false)
+            )}
+            onPointerDown={(e) => (
+              e.target.setPointerCapture(e.pointerId),
               drag(
                 new THREE.Vector3()
                   .copy(e.point)
                   .sub(vec.copy(card.current.translation()))
-              );
-            }}
+              )
+            )}
           >
             <mesh geometry={nodes.card.geometry}>
               <meshPhysicalMaterial
@@ -287,7 +237,7 @@ function Band({ maxSpeed = 50, minSpeed = 0 }: BandProps) {
         <meshLineMaterial
           color="white"
           depthTest={false}
-          resolution={isSmall ? [1000, 2000] : [1000, 1000]}
+          resolution={[width, height]}
           useMap
           map={texture}
           repeat={[-4, 1]}
