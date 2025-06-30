@@ -119,13 +119,17 @@ export default function Hackathons() {
           {/* Falling Text for Desktop */}
           <div className="hidden md:block">
             <FallingText
-              text={` Besides being a developer and content creator, I am big on joining competitions, like hackathons. It is a great way to work on solving actual problems and meet interesting people. Here are some of the events I've participated in:`}
+              text={`As a web and mobile developer, I focus on building creative digital experiences. Whether it's crafting responsive websites, mobile interfaces, or experimental UI animations, I enjoy turning ideas into functional and aesthetic solutions.`}
               highlightWords={[
-                'hackathons',
-                'competitions',
-                'problems',
-                'interesting',
-                'events',
+                'web',
+                'mobile',
+                'developer',
+                'digital',
+                'responsive',
+                'interfaces',
+                'UI',
+                'aesthetic',
+                'solutions',
               ]}
               trigger="hover"
               backgroundColor="transparent"
