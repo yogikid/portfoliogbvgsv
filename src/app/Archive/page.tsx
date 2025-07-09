@@ -8,6 +8,7 @@ import FallingText from '@/blocks/TextAnimations/FallingText/FallingText';
 import Threads from '@/blocks/Backgrounds/Threads/Threads';
 import HackathonEntry from './HackathonEntry';
 import CircularGallery from '@/blocks/Components/CircularGallery/CircullarGallery';
+import TextPressure from '@/blocks/TextAnimations/TextPressure/TextPressure';
 
 const handleAnimationComplete = () => {
   console.log('Hackathon page animation completed!');
@@ -164,7 +165,18 @@ export default function Hackathons() {
           {/* Render Hackathon Entries */}
           {/* Adjusted margin top for responsiveness */}
           <div className="mt-20 md:mt-40">
-            {' '}
+            <TextPressure
+              text="My Projects"
+              flex={true}
+              alpha={false}
+              stroke={false}
+              width={true}
+              weight={true}
+              italic={true}
+              textColor="#ffffff"
+              strokeColor="#ff0000"
+              minFontSize={36}
+            />{' '}
             {/* Adjusted margin top */}
             {hackathonEntriesData.map((entry, index) => (
               <HackathonEntry
