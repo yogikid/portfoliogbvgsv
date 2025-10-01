@@ -197,7 +197,7 @@ export default function Home() {
 
             <div className="hidden md:block mt-10 mb-20">
               <ProfileCard
-                name="Dimas Dekananta"
+                name="Yogi Priyan Perdana"
                 title="Web Developer"
                 handle="unicodes"
                 status="Online"
@@ -219,7 +219,7 @@ export default function Home() {
 
             <div className="md:hidden mt-10 mb-20">
               <ProfileCard
-                name="Dimas Dekananta"
+                name="Yogi Priyan Perdana"
                 title="Software Engineer"
                 handle="unicodes"
                 status="Online"
@@ -272,7 +272,7 @@ export default function Home() {
         {' '}
         {/* Added margin top */}
         <p>
-          &copy; {new Date().getFullYear()} Dimas Dekananta. All rights
+          &copy; {new Date().getFullYear()} GiiDev. All rights
           reserved.
         </p>{' '}
         {/* Updated name */}
