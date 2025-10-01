@@ -46,17 +46,17 @@ const items = [
 const socialLinks = [
   {
     platform: 'GitHub',
-    href: 'https://github.com/dimasdekka',
+    href: 'https://github.com/yogikid',
     iconPath: '/icons/github_icon.svg',
   },
   {
     platform: 'LinkedIn',
-    href: 'https://www.linkedin.com/in/dimas-dekananta/',
+    href: 'https://www.linkedin.com/in/yogi-priyan-perdana/',
     iconPath: '/icons/linkedin_icon.svg',
   },
   {
     platform: 'Gmail',
-    href: 'mailto:dekanantadimas@gmail.com',
+    href: 'mailto:yogiisaha@gmail.com',
     iconPath: '/icons/gmail_icon.svg',
   },
 ];
