@@ -199,18 +199,18 @@ export default function Home() {
               <ProfileCard
                 name="Yogi Priyan Perdana"
                 title="Web Developer"
-                handle="unicodes"
+                handle="Giidev_"
                 status="Online"
                 contactText="Contact Me"
                 grainUrl="/photos/texture/grain.webp"
                 iconUrl="/photos/texture/iconpattern.png"
-                avatarUrl="/photos/profile/profilecard.svg"
+                avatarUrl="/photos/profile/me1.png"
                 miniAvatarUrl="/photos/profile/profilecard_2.svg"
                 showUserInfo={true}
                 enableTilt={true}
                 onContactClick={() =>
                   window.open(
-                    'https://www.linkedin.com/in/dimas-dekananta',
+                    'https://www.instagram.com/giidev_',
                     '_blank'
                   )
                 }
@@ -226,7 +226,7 @@ export default function Home() {
                 grainUrl="/photos/texture/grain.webp"
                 iconUrl="/photos/texture/iconpattern.png"
                 contactText="Contact Me"
-                avatarUrl="/photos/profile/profilecard.svg"
+                avatarUrl="/photos/profile/me1.png"
                 showUserInfo={true}
                 enableTilt={true}
                 onContactClick={() => console.log('Contact clicked')}
@@ -256,7 +256,7 @@ export default function Home() {
             className="md:text-7xl text-3xl font-extrabold"
           />
         </div>
-        <GitHubCalendar username="dimasdekka" />
+        <GitHubCalendar username="yogikid" />
         {/* Projects Section Start */}
         {/* Modified this div to use a grid layout for two columns */}
         <div className="grid grid-cols-1 md:grid-cols-3 w-full max-w-[1400px] mx-auto mt-10">
