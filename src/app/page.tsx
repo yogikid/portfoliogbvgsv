@@ -92,7 +92,7 @@ export default function Home() {
         {/* ... other main content elements ... */}
         <div className="w-full flex justify-center items-center my-4 md:mt-15 text-center font-bold relative px-4 md:px-0">
           <BlurText
-            text="Dimas Dekananta"
+            text="Yogi Priyan Perdana"
             delay={150}
             animateBy="letters"
             direction="top"
@@ -102,7 +102,7 @@ export default function Home() {
         </div>
         <div className="font-bold text-center opacity-0 animate-fadeIn mt-1 md:mt-3">
           <TrueFocus
-            sentence="Web Developer|Mobile Developer|Solopreneur"
+            sentence="Web Developer|Mobile Developer|Entrepreneur"
             manualMode={true}
             blurAmount={5}
             borderColor="cyan"
@@ -130,7 +130,7 @@ export default function Home() {
         `}</style>
         <div className="w-full items-center mt-[300px] relative h-[300px] hidden md:block">
           <ScrollVelocity
-            texts={['Unicodes', 'Dimas Dekananta']}
+            texts={['GiiDev', 'Yogi Priyan Perdana']}
             velocity={100}
             className="custom-scroll-text"
           />
@@ -221,7 +221,7 @@ export default function Home() {
               <ProfileCard
                 name="Yogi Priyan Perdana"
                 title="Software Engineer"
-                handle="unicodes"
+                handle="giidev_"
                 status="Online"
                 grainUrl="/photos/texture/grain.webp"
                 iconUrl="/photos/texture/iconpattern.png"
